@@ -256,7 +256,8 @@ with tab_predict:
         # Show ground truth tag if we selected a dataset sample
         if actual_class is not None:
             actual_text = "Fraud" if actual_class == 1 else "Legitimate"
-            st.write(f"**Verification Info:** Actual Ground Truth: `{actual_text}` (Model Prediction: `{"Fraud" if prediction == 1 else "Legitimate"}`)")
+            pred_text = "Fraud" if prediction == 1 else "Legitimate"
+            st.write(f"**Verification Info:** Actual Ground Truth: `{actual_text}` (Model Prediction: `{pred_text}`)")
 
         # Prepare description of deviations to feed into Gemini prompt
         anomalies_list = []
@@ -351,7 +352,7 @@ with tab_eda:
             
         st.subheader("Feature Correlation Matrix (Top Correlated with Fraud)")
         # Calculate feature correlations against class and extract top-correlating columns
-        corr = raw_df.corr()['Class'].sort_values()
+        corr = raw_df.corr(numeric_only=True)['Class'].sort_values()
         top_corr_features = list(corr.head(5).index) + list(corr.tail(6).index)
         corr_matrix = raw_df[top_corr_features].corr()
         
